@@ -35,22 +35,6 @@ BUILTIN_VOICES = [
 ]
 
 
-def _resolve_style_character(voice_id: str):
-    """Resolve a style-character id to its preset dict, or None.
-
-    A style character (e.g. "deep-pro") maps to a Pocket TTS base voice
-    plus a pitch/speed preset — generation stays on Pocket TTS.
-    """
-    try:
-        from voice_registry import STYLE_CHARACTERS
-    except ImportError:
-        try:
-            from engine.voice_registry import STYLE_CHARACTERS
-        except ImportError:
-            return None
-    return next((s for s in STYLE_CHARACTERS if s.get("id") == voice_id), None)
-
-
 def _split_text(text: str, max_chars: int = 1000) -> list[str]:
     """Split long text into chunks at sentence boundaries.
 
@@ -213,16 +197,6 @@ class TTSEngine:
             await self.load_model()
         if not self.model_loaded:
             raise RuntimeError("TTS model load nahi hua")
-
-        # Style character? Swap in its base voice and fold the preset
-        # pitch/speed into the request's own pitch/speed.
-        style = _resolve_style_character(voice_id)
-        if style is not None:
-            voice_id = style["base_voice"]
-            pitch = pitch * float(style.get("pitch", 1.0))
-            speed = speed * float(style.get("speed", 1.0))
-            logger.info("Style character %s -> base %s (pitch %.2f, speed %.2f)",
-                        style["id"], voice_id, pitch, speed)
 
         start = time.time()
         try:
