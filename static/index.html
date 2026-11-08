@@ -3,46 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#008080">
+<meta name="description" content="VoiceForge 2762 — AI voiceover studio powered by Pocket TTS. Generate speech, explore 26 built-in voices, clone voices, and batch-generate audio.">
 <title>VoiceForge 2762 — AI Voiceover Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
-<!-- ============ ADS (Adsterra / AdSense) ============
-  To show ads, paste your ad network code into the 3 slots below
-  (search for "ad-slot" in this file):
-    1. #ad-top    — banner under the menu (all tabs)
-    2. #ad-studio — under the Generate button (Studio tab)
-    3. #ad-bottom — banner above the footer (all tabs)
-  Adsterra: paste the banner/social-bar script straight into a slot.
-  AdSense: first uncomment the script below and put your publisher ID
-  (ca-pub-XXXXXXXXXXXXXXXX), then paste each ad unit's <ins> code
-  into a slot.
--->
-<!-- AdSense loader (uncomment + replace ca-pub-XXXX with your ID):
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
--->
+<link rel="icon" type="image/svg+xml" href="/static/assets/logo.svg">
+<!-- Ad slots (Adsterra, do not remove):
+     #ad-top    — banner under the navbar (all tabs)
+     #ad-studio — inside Studio, under the result player
+     #ad-bottom — banner above the footer (all tabs) -->
 </head>
 <body>
-<header>
-  <div class="brand">
-    <img class="logo-img" src="/static/assets/logo.svg" alt="VoiceForge 2762 logo" width="48" height="48">
-    <div>
-      <h1>VoiceForge <span>2762</span></h1>
-      <p>AI Voiceover Studio · by Usman Balouch</p>
+<div class="bg-mesh" aria-hidden="true"></div>
+
+<!-- SETUP / LOADING SCREEN -->
+<div id="page-setup" class="page" style="display:none;">
+  <div class="setup-container">
+    <div class="setup-logo">
+      <img class="setup-logo-img" src="/static/assets/logo.svg" alt="VoiceForge 2762 logo" width="76" height="76">
+      <h1 class="gradient-text">VoiceForge 2762</h1>
     </div>
+    <p class="setup-subtitle">Preparing your AI voice engine…</p>
+    <div class="progress-bar-container"><div class="progress-bar" id="setupProgress"></div></div>
+    <p class="setup-status" id="setupStatus">Starting up…</p>
+    <div class="setup-features">
+      <div class="setup-feature"><span class="feature-icon">🎙️</span> Instant voiceovers from plain text</div>
+      <div class="setup-feature"><span class="feature-icon">🧬</span> Clone a voice from a short recording</div>
+      <div class="setup-feature"><span class="feature-icon">🗣️</span> 26 built-in voices + batch generation</div>
+    </div>
+    <p class="setup-byline">by Usman Balouch</p>
   </div>
-  <div id="statusBadge" class="badge">⏳ Model loading…</div>
-</header>
+</div>
 
-<nav id="tabs">
-  <button data-tab="studio" class="active">🎬 Studio</button>
-  <button data-tab="voices">🗣️ Voices</button>
-  <button data-tab="clone">🧬 Clone</button>
-  <button data-tab="batch">📦 Batch</button>
-  <button data-tab="history">🕘 History</button>
-  <button data-tab="setup">⚙️ Setup</button>
-</nav>
+<!-- COMMUNITY GATE -->
+<div id="page-gate" class="page" style="display:none;">
+  <div class="gate-container">
+    <div class="gate-logo">
+      <img class="gate-logo-img" src="/static/assets/logo.svg" alt="VoiceForge 2762 logo" width="58" height="58">
+      <h1 class="gradient-text">VoiceForge 2762</h1>
+      <p class="gate-tagline">AI Text-to-Speech Studio</p>
+    </div>
+    <div class="gate-card">
+      <h2>Community access</h2>
+      <p class="gate-desc">Follow along to continue to the VoiceForge 2762 voice studio.</p>
+      <div class="gate-steps">
+        <div class="gate-step" id="gateStep1">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Follow Planet Pulse</h3>
+            <p>Visit the Planet Pulse page on Facebook for VoiceForge 2762 updates.</p>
+            <a href="https://www.facebook.com/profile.php?id=61594912644353" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" id="fbLink">Visit Facebook</a>
+          </div>
+          <div class="step-check" id="fbCheck">✓</div>
+        </div>
+        <div class="gate-step" id="gateStep2">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Join the WhatsApp channel</h3>
+            <p>Get VoiceForge 2762 news and updates on WhatsApp.</p>
+            <a href="https://whatsapp.com/channel/0029VbCoIxx90x2p9Hkl7D2s" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" id="waLink">Open WhatsApp Channel</a>
+          </div>
+          <div class="step-check" id="waCheck">✓</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-unlock" id="btnUnlock" disabled>Continue to VoiceForge 2762</button>
+    </div>
+    <p class="gate-footer">VoiceForge 2762 · by Usman Balouch</p>
+  </div>
+</div>
 
-<!-- AD SLOT 1 (top banner, all tabs) — Adsterra Banner 728x90 -->
-<div class="ad-slot" id="ad-top"><script>
+<!-- APP SHELL -->
+<div id="app-container" style="display:none;">
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <img src="/static/assets/logo.svg" width="28" height="28" alt="VoiceForge 2762 logo">
+      <span class="nav-title gradient-text">VoiceForge 2762</span>
+    </div>
+    <div class="nav-tabs">
+      <button type="button" class="nav-tab active" data-page="studio">Studio</button>
+      <button type="button" class="nav-tab" data-page="voices">Voices</button>
+      <button type="button" class="nav-tab" data-page="clone">Clone</button>
+      <button type="button" class="nav-tab" data-page="batch">Batch</button>
+    </div>
+    <div class="nav-badge"><span class="badge-dot"></span> Pocket TTS</div>
+  </nav>
+
+  <!-- AD SLOT 1 (top banner, all tabs) — Adsterra Banner 728x90 -->
+  <div class="ad-slot" id="ad-top"><script>
   atOptions = {
     'key' : '36dc66047252ce597ba6e5365bdd4ae2',
     'format' : 'iframe',
@@ -53,53 +103,11 @@
 </script>
 <script src="https://www.highrevenueformat.com/36dc66047252ce597ba6e5365bdd4ae2/invoke.js"></script></div>
 
-<main>
-  <!-- STUDIO -->
-  <section id="tab-studio" class="tab active">
-    <label>Text (max 50000 characters)</label>
-    <textarea id="textInput" rows="6" placeholder="Yahan apna voiceover script likho… e.g. 'In the dark forest, a lone wolf waited…'"></textarea>
-    <div class="row">
-      <div class="field">
-        <label>Voice</label>
-        <select id="voiceSelect"></select>
-      </div>
-      <div class="field">
-        <label>Format</label>
-        <select id="formatSelect">
-          <option value="wav">WAV</option>
-          <option value="mp3" selected>MP3</option>
-        </select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Speed: <span id="speedVal">1.0×</span></label>
-        <input type="range" id="speedInput" min="0.5" max="2" step="0.05" value="1">
-      </div>
-      <div class="field">
-        <label>Pitch: <span id="pitchVal">1.0×</span></label>
-        <input type="range" id="pitchInput" min="0.5" max="2" step="0.05" value="1">
-      </div>
-      <div class="field">
-        <label>Reverb: <span id="reverbVal">0</span></label>
-        <input type="range" id="reverbInput" min="0" max="1" step="0.1" value="0">
-      </div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Background music (optional)</label>
-        <select id="bgmSelect"><option value="">— None —</option></select>
-      </div>
-    </div>
-    <button id="generateBtn" class="primary">🎙️ Generate Voiceover</button>
-    <div id="genStatus" class="status"></div>
-    <div id="playerWrap" class="player" hidden>
-      <audio id="player" controls></audio>
-      <a id="downloadLink" class="btn" download>⬇️ Download</a>
-    </div>
-
-    <!-- AD SLOT 2 (Studio, under the player) — Adsterra Banner 300x250 -->
-    <div class="ad-slot" id="ad-studio"><script>
+  <main class="main-content">
+    <div id="page-studio" class="page app-page">
+      <div id="studioContent"></div>
+      <!-- AD SLOT 2 (Studio, under the player) — Adsterra Banner 300x250 -->
+      <div class="ad-slot" id="ad-studio"><script>
   atOptions = {
     'key' : '38516a1b77133edeaa08acdce0ff6fff',
     'format' : 'iframe',
@@ -109,77 +117,14 @@
   };
 </script>
 <script src="https://www.highrevenueformat.com/38516a1b77133edeaa08acdce0ff6fff/invoke.js"></script></div>
-  </section>
-
-  <!-- VOICES -->
-  <section id="tab-voices" class="tab">
-    <div class="row">
-      <input id="voiceSearch" type="text" placeholder="🔍 Search voices…">
-      <select id="genderFilter">
-        <option value="">All genders</option>
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-        <option value="other">Cloned</option>
-      </select>
-      <select id="categoryFilter">
-        <option value="">All categories</option>
-        <option value="featured">⭐ Featured characters</option>
-        <option value="base">Base voices</option>
-        <option value="deep">Deep</option>
-        <option value="warm">Warm</option>
-        <option value="bright">Bright</option>
-        <option value="energetic">Energetic</option>
-        <option value="calm">Calm</option>
-        <option value="soft">Soft</option>
-        <option value="cloned">Cloned voices</option>
-      </select>
     </div>
-    <div id="voiceGrid" class="grid"></div>
-  </section>
+    <div id="page-voices" class="page app-page" style="display:none;"></div>
+    <div id="page-clone" class="page app-page" style="display:none;"></div>
+    <div id="page-batch" class="page app-page" style="display:none;"></div>
+  </main>
 
-  <!-- CLONE -->
-  <section id="tab-clone" class="tab">
-    <p class="hint">Apni awaz ya kisi ki awaz (sirf permission ke saath) clone karo. 10–30 second ki clear recording upload karo. Background noise khud saaf ho jayega — cloned voice pure milegi.</p>
-    <label>Voice name</label>
-    <input id="cloneName" type="text" placeholder="e.g. My Deep Voice">
-    <label>Reference audio (WAV/MP3/OGG/FLAC/M4A, max 50MB)</label>
-    <input id="cloneFile" type="file" accept="audio/*">
-    <button id="cloneBtn" class="primary">🧬 Clone Voice</button>
-    <div id="cloneStatus" class="status"></div>
-    <h3>Your cloned voices</h3>
-    <div id="clonedList" class="grid"></div>
-  </section>
-
-  <!-- BATCH -->
-  <section id="tab-batch" class="tab">
-    <label>Ek line per row — har line ki alag audio banegi</label>
-    <textarea id="batchInput" rows="8" placeholder="Line one&#10;Line two&#10;Line three"></textarea>
-    <button id="batchBtn" class="primary">📦 Generate Batch (ZIP)</button>
-    <div id="batchStatus" class="status"></div>
-  </section>
-
-  <!-- HISTORY -->
-  <section id="tab-history" class="tab">
-    <button id="refreshHistory" class="btn">🔄 Refresh</button>
-    <a href="/api/history/download-all" class="btn">⬇️ Download All (ZIP)</a>
-    <div id="historyList"></div>
-  </section>
-
-  <!-- SETUP -->
-  <section id="tab-setup" class="tab">
-    <div id="setupInfo" class="status">Checking model status…</div>
-    <button id="setupStartBtn" class="btn">▶️ Load / Reload Model</button>
-    <h3>Hugging Face token (voice cloning ke liye)</h3>
-    <p class="hint">Pocket TTS ka cloning model gated hai. HF account banao, model license accept karo, phir token (hf_…) yahan lagao.</p>
-    <input id="hfToken" type="password" placeholder="hf_xxxxxxxxxxxxxxxx">
-    <button id="tokenBtn" class="primary">🔑 Save Token</button>
-    <button id="tokenResetBtn" class="btn">Reset Token</button>
-    <div id="tokenStatus" class="status"></div>
-  </section>
-</main>
-
-<!-- AD SLOT 3 (bottom banner, all tabs) — Adsterra Banner 728x90 -->
-<div class="ad-slot" id="ad-bottom"><script>
+  <!-- AD SLOT 3 (bottom banner, all tabs) — Adsterra Banner 728x90 -->
+  <div class="ad-slot" id="ad-bottom"><script>
   atOptions = {
     'key' : '36dc66047252ce597ba6e5365bdd4ae2',
     'format' : 'iframe',
@@ -190,7 +135,10 @@
 </script>
 <script src="https://www.highrevenueformat.com/36dc66047252ce597ba6e5365bdd4ae2/invoke.js"></script></div>
 
-<footer>VoiceForge 2762 · Local-first Pocket TTS · Unlimited generation · by Usman Balouch</footer>
+  <footer>VoiceForge 2762 · Pocket TTS voiceover studio · by Usman Balouch</footer>
+</div>
+
+<div id="toasts" class="toast-container" aria-live="polite"></div>
 <script src="/static/js/app.js"></script>
 </body>
 </html>
