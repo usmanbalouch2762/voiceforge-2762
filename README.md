@@ -19,7 +19,8 @@ VoiceForge 2762 is a desktop-oriented AI text-to-speech application by **2762 AI
 ## Features
 
 - **Text-to-speech studio:** Generate audio from text using the configured Pocket TTS engine.
-- **Voice library:** Browse 26 built-in voices and search the voice list.
+- **Voice library:** Browse the 26 built-in Pocket TTS voices and search the voice list.
+- **Community gate:** First visit asks you to visit the Planet Pulse Facebook page and join the WhatsApp channel, then the tool opens.
 - **Voice cloning workflow:** Create a voice profile from reference audio when the installed model supports cloning and required access is available.
 - **Batch generation:** Submit multiple text entries and download generated audio as a ZIP archive.
 - **Audio options:** Configure supported speed, pitch, reverb, output format, and background music options.
@@ -32,7 +33,7 @@ VoiceForge 2762 is a desktop-oriented AI text-to-speech application by **2762 AI
 1. Install a supported Python release and ensure `python` is available in your terminal.
 2. Clone this repository:
    ```powershell
-   git clone https://github.com/noman27a/voiceforge-2762.git
+   git clone https://github.com/usmanbalouch2762/voiceforge-2762.git
    cd voiceforge-2762
    ```
 3. Run `Setup.bat` and follow the prompts.
@@ -62,7 +63,7 @@ Pocket TTS voice cloning uses a gated model on Hugging Face:
 1. Create a free account at https://huggingface.co
 2. Open the Pocket TTS model page and accept its license
 3. Create a token at https://huggingface.co/settings/tokens (`hf_…`)
-4. Paste it in the app's **Setup** tab and save
+4. Paste it in the app's **Clone** page (Model access panel) and save
 
 Cloning works only with your own voice or a recording you have permission to clone.
 
@@ -105,7 +106,7 @@ See [CLOUD_DEPLOYMENT.md](CLOUD_DEPLOYMENT.md). Static hosting can serve the fro
 
 ## Ads (Adsterra / AdSense)
 
-The UI has 3 ready ad slots in `static/index.html` — empty slots stay hidden until ad code is pasted in:
+The UI has 3 live Adsterra ad slots in `static/index.html` (approved site `mani2762-voiceforge-2762.hf.space`):
 
 | Slot | Location |
 | --- | --- |
