@@ -126,22 +126,15 @@ function initGatePage() {
   const stepFb = $("gateStep1");
   const stepWa = $("gateStep2");
   const unlockBtn = $("btnUnlock");
+  const skipBtn = $("btnSkip");
   const fbLink = $("fbLink");
   const waLink = $("waLink");
   if (!stepFb || !stepWa || !unlockBtn || !fbLink || !waLink) return;
   let fbDone = false;
   let waDone = false;
   const checkReady = () => { unlockBtn.disabled = !(fbDone && waDone); };
-  fbLink.addEventListener("click", () => {
-    setTimeout(() => { fbDone = true; stepFb.classList.add("done"); checkReady(); }, 2000);
-  });
-  waLink.addEventListener("click", () => {
-    setTimeout(() => { waDone = true; stepWa.classList.add("done"); checkReady(); }, 2000);
-  });
-  unlockBtn.addEventListener("click", async () => {
-    if (!fbDone || !waDone) return;
-    unlockBtn.textContent = "Opening VoiceForge 2762…";
-    unlockBtn.disabled = true;
+  const verifyAndEnter = async (btn, busyText) => {
+    if (btn) { btn.textContent = busyText; btn.disabled = true; }
     try {
       await fetch("/api/verify", { method: "POST" });
       localStorage.setItem("vf_verified", "true");
@@ -151,7 +144,22 @@ function initGatePage() {
       localStorage.setItem("vf_verified", "true");
       showApp();
     }
+  };
+  fbLink.addEventListener("click", () => {
+    setTimeout(() => { fbDone = true; stepFb.classList.add("done"); checkReady(); }, 2000);
   });
+  waLink.addEventListener("click", () => {
+    setTimeout(() => { waDone = true; stepWa.classList.add("done"); checkReady(); }, 2000);
+  });
+  unlockBtn.addEventListener("click", async () => {
+    if (!fbDone || !waDone) return;
+    await verifyAndEnter(unlockBtn, "Opening VoiceForge 2762…");
+  });
+  if (skipBtn) {
+    skipBtn.addEventListener("click", async () => {
+      await verifyAndEnter(skipBtn, "Opening VoiceForge 2762…");
+    });
+  }
 }
 
 /* ---------- shared helpers ---------- */
