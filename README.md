@@ -1,3 +1,14 @@
+---
+title: Voiceforge 2762
+sdk: gradio
+emoji: 📈
+colorFrom: red
+colorTo: red
+sdk_version: 6.31.0
+python_version: '3.12'
+app_file: app.py
+pinned: false
+---
 # VoiceForge 2762: AI Text-to-Speech Studio
 
 <div align="center">
